@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /movie/
+Allow: /movies/
+Allow: /tv/
+Allow: /tv-series/
+Allow: /genre/
+Allow: /trending/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /assets/
+Disallow: /player/
+
+Sitemap: https://www.usflix.online/sitemap.xml

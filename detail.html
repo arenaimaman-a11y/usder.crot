@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FLIX</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Outfit, Arial' font-weight='900' font-size='90' fill='%23e50914'>F</text></svg>">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS with Dark Mode Configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable dark mode via class toggle
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: '#e50914',
+                        surface: '#0f172a',
+                        dark: '#050505',
+                        light: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            /* Basic transition for theme change */
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Smooth Interactions */
+        .clickable {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        .clickable:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        /* Hide Scrollbars for horizontal lists */
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom Drag Styling */
+        .drag-area {
+            cursor: grab;
+        }
+        .drag-area:active {
+            cursor: grabbing;
+        }
+
+        /* Image Hover Effects (Adapts to Light/Dark) */
+        .img-card {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid transparent;
+        }
+        .img-card.active {
+            border-color: theme('colors.brand');
+            box-shadow: 0 0 25px rgba(229, 9, 20, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .ep-card {
+            transition: all 0.4s ease;
+            border: 1px solid transparent;
+        }
+        .dark .ep-card.active {
+            border-color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .ep-card.active {
+            border-color: theme('colors.slate.400');
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        /* Improved Icon Styling */
+        .nav-icon {
+            @apply flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full backdrop-blur-sm border transition-all duration-300;
+        }
+        .dark .nav-icon {
+            @apply bg-white/5 border-white/10 text-white/90 hover:bg-white/20 hover:scale-110 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)];
+        }
+        .nav-icon {
+            @apply bg-black/5 border-black/10 text-slate-800 hover:bg-black/10 hover:scale-110 shadow-sm;
+        }
+    </style>
+</head>
+<body class="antialiased bg-light dark:bg-dark text-slate-900 dark:text-white">
+
+    <!-- Navigation -->
+    <header id="main-nav" class="fixed top-0 left-0 right-0 h-[70px] md:h-[80px] flex items-center justify-between px-4 md:px-12 z-50 transition-all duration-500">
+        <!-- FLIX Logo refined -->
+        <a href="/" class="font-display font-black text-3xl md:text-4xl text-brand tracking-tighter clickable hover:scale-105 transition-transform" style="text-shadow: 0 2px 10px rgba(229,9,20,0.3); letter-spacing: -1.5px;">
+            FLIX<span class="text-slate-800 dark:text-white text-xs align-top ml-0.5 opacity-80">™</span>
+        </a>
+        
+        <div class="flex items-center gap-2 md:gap-4">
+            <!-- Theme Toggle Button (Fungsional) -->
+            <button id="theme-toggle" class="nav-icon group" aria-label="Toggle Theme">
+                <i id="theme-icon" class="fas fa-moon text-sm md:text-base group-hover:text-brand transition-colors"></i>
+            </button>
+
+            <!-- Search Icon linked to Offer -->
+            <a href="#" onclick="redirectToOffer(); return false;" class="nav-icon group" title="Search">
+                <i class="fas fa-search text-sm md:text-base group-hover:text-brand transition-colors"></i>
+            </a>
+            
+            <!-- User Icon linked to Offer -->
+            <a href="#" onclick="redirectToOffer(); return false;" class="nav-icon group" title="Account">
+                <i class="fas fa-user text-sm md:text-base group-hover:text-brand transition-colors"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Backdrop with Dynamic Gradients for Light/Dark -->
+    <div id="backdrop-container" class="relative w-full h-[60vh] md:h-[75vh] bg-cover bg-center transition-all duration-700 ease-in-out">
+        <!-- Overlay for Light Mode -->
+        <div class="absolute inset-0 bg-gradient-to-t from-light via-light/80 to-transparent dark:hidden"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-light via-light/50 to-transparent dark:hidden"></div>
+        
+        <!-- Overlay for Dark Mode -->
+        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent hidden dark:block"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/60 to-transparent hidden dark:block"></div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="relative z-10 px-4 md:px-12 lg:px-24 -mt-32 md:-mt-48 pb-20">
+        
+        <!-- Title & Metadata -->
+        <div class="max-w-4xl mx-auto md:mx-0">
+            <h1 id="v-title" class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-3 md:mb-5 leading-tight text-center md:text-left tracking-tight drop-shadow-md dark:drop-shadow-2xl">
+                Loading...
+            </h1>
+            
+            <!-- Status Pill (For TV Shows) -->
+            <div id="status-viewer" class="hidden items-center justify-center md:justify-start gap-2 md:gap-3 mb-4 md:mb-6">
+                <span class="bg-brand text-white text-[9px] md:text-xs font-black px-2.5 md:px-3 py-1.5 rounded-md shadow-[0_4px_12px_rgba(229,9,20,0.4)] uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                    Watching
+                </span>
+                <span id="current-ep-label" class="text-xs md:text-sm font-bold text-slate-700 dark:text-white/90 tracking-wide bg-black/5 dark:bg-white/5 px-3.5 py-1.5 rounded-md backdrop-blur-sm border border-black/10 dark:border-white/10 shadow-sm">
+                    SEASON 1 — EPISODE 1
+                </span>
+            </div>
+            
+            <!-- Badges -->
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3 mb-6 md:mb-8">
+                <div id="v-rating" class="bg-brand text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-md flex items-center gap-1">
+                    <i class="fas fa-star text-yellow-300 text-[10px]"></i> <span>0.0</span>
+                </div>
+                <div id="v-year" class="bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/10 text-slate-800 dark:text-white/90 text-xs font-bold px-3 py-1.5 rounded-md shadow-sm">----</div>
+                <div id="v-runtime" class="bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/10 text-slate-800 dark:text-white/90 text-xs font-bold px-3 py-1.5 rounded-md shadow-sm">-- min</div>
+                <div class="bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/10 text-slate-800 dark:text-white/90 text-xs font-bold px-3 py-1.5 rounded-md shadow-sm hidden sm:block">4K UHD</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 md:gap-4 mb-8 md:mb-10 max-w-xl mx-auto md:mx-0">
+                <button onclick="redirectToOffer()" class="group relative flex-1 bg-slate-900 dark:bg-white text-white dark:text-black font-extrabold text-base md:text-lg py-4 rounded-xl flex items-center justify-center gap-3 overflow-hidden transition-all shadow-xl hover:scale-[1.02] active:scale-[0.98]">
+                    <!-- Play button glow effect -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-black/10 to-transparent -skew-x-12 translate-x-[-150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-out"></div>
+                    <div class="w-8 h-8 rounded-full bg-white/20 dark:bg-black/10 flex items-center justify-center pl-0.5 group-hover:bg-brand group-hover:text-white transition-colors duration-300">
+                        <i class="fas fa-play text-sm"></i>
+                    </div>
+                    <span>Play Now</span>
+                </button>
+                <a href="#" onclick="redirectToOffer(); return false;" class="group flex-1 bg-white/50 dark:bg-surface/80 backdrop-blur-xl border border-slate-200 dark:border-white/15 text-slate-800 dark:text-white font-bold text-base md:text-lg py-4 rounded-xl flex items-center justify-center gap-3 transition-all hover:bg-slate-100 dark:hover:bg-white/10 shadow-lg active:scale-[0.98]">
+                    <div class="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center group-hover:bg-black/10 dark:group-hover:bg-white/20 transition-colors">
+                        <i class="fas fa-download text-sm"></i>
+                    </div>
+                    <span>Download</span>
+                </a>
+            </div>
+
+            <!-- Overview -->
+            <div class="relative">
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-brand rounded-full hidden md:block"></div>
+                <p id="v-overview" class="text-slate-700 dark:text-gray-300 text-sm md:text-base leading-relaxed md:leading-loose max-w-3xl md:pl-6 text-center md:text-left line-clamp-4 md:line-clamp-none font-medium text-pretty">
+                    Fetching content overview...
+                </p>
+            </div>
+        </div>
+
+        <!-- TV Show Layout (Seasons & Episodes) -->
+        <div id="tv-layout" class="hidden mt-12 md:mt-20">
+            
+            <!-- Seasons -->
+            <div class="mb-10 md:mb-14">
+                <div class="flex items-center gap-4 mb-4 md:mb-6 px-2 md:px-0">
+                    <h2 class="font-display text-2xl md:text-3xl font-black tracking-tight">Seasons</h2>
+                    <div class="h-[2px] flex-1 bg-gradient-to-r from-slate-200 dark:from-white/20 to-transparent"></div>
+                </div>
+                <div id="season-scroll" class="flex gap-4 md:gap-5 overflow-x-auto hide-scrollbar drag-area pb-6 pt-2 px-4 md:px-2 -mx-4 md:mx-0 scroll-pl-4 snap-x">
+                    <!-- Season Cards Injected Here -->
+                </div>
+            </div>
+
+            <!-- Episodes -->
+            <div>
+                <div class="flex items-center gap-4 mb-4 md:mb-6 px-2 md:px-0">
+                    <h2 class="font-display text-2xl md:text-3xl font-black tracking-tight">Episodes</h2>
+                    <div class="h-[2px] flex-1 bg-gradient-to-r from-slate-200 dark:from-white/20 to-transparent"></div>
+                </div>
+                <div id="episode-scroll" class="flex gap-4 md:gap-6 overflow-x-auto hide-scrollbar drag-area pb-10 pt-2 px-4 md:px-2 -mx-4 md:mx-0 scroll-pl-4 snap-x">
+                    <!-- Episode Cards Injected Here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-white/5 bg-white/50 dark:bg-surface/50 backdrop-blur-md pt-16 pb-8 px-6 text-center mt-10 transition-colors duration-500">
+        <div class="max-w-4xl mx-auto flex flex-col items-center">
+            <a href="/" class="font-display font-black text-4xl text-brand tracking-tighter mb-8 hover:scale-105 transition-transform duration-300">
+                FLIX<span class="text-slate-800 dark:text-white text-xs align-top ml-0.5">™</span>
+            </a>
+            
+            <div id="footer-studios" class="flex flex-wrap justify-center items-center gap-6 md:gap-12 mb-12 opacity-60 dark:opacity-40 hover:opacity-100 transition-opacity duration-500 w-full px-4">
+                <!-- Studio Logos -->
+            </div>
+            
+            <div class="w-full h-px bg-slate-200 dark:bg-white/5 mb-8"></div>
+            
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-8 text-sm text-slate-600 dark:text-gray-500 font-bold">
+                <a href="#" class="hover:text-brand transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-brand transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-brand transition-colors">Help Center</a>
+            </div>
+            
+            <p class="text-slate-500 dark:text-gray-600 text-xs md:text-sm tracking-widest font-black uppercase">
+                &copy; 2026 FLIX ENTERTAINMENT. ALL RIGHTS RESERVED.
+            </p>
+                        <p class="text-slate-500 dark:text-gray-600 text-xs md:text-sm tracking-widest font-black uppercase">
+                <script async="async" data-cfasync="false" src="https://twigcrucialpal.com/dd5a3c4937ebe8b47da808bcd5e1d283/invoke.js"></script>
+<div id="container-dd5a3c4937ebe8b47da808bcd5e1d283"></div>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- THEME TOGGLE LOGIC (Light / Dark Mode) ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        // Initialize Theme from LocalStorage or System Preference
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                html.classList.remove('dark');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                html.classList.add('dark');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        initTheme(); // Run on load
+
+        // --- API CONFIGURATION ---
+        const API = {
+            KEY: '22be462e6d3de1dbab03d1ca50847b5a',
+            BASE: 'https://api.themoviedb.org/3',
+            IMG: 'https://image.tmdb.org/t/p/w500',
+            FULL: 'https://image.tmdb.org/t/p/original'
+        };
+
+        // --- SINGLE OFFER LINK (Ad-Free & Direct) ---
+        const SINGLE_OFFER_LINK = "https://smrturl.co/2e6435f";
+
+        let mainOverview = "";
+        let mainPosterUrl = ""; 
+        let currentSNum = 1;
+
+        // Redirect Function
+        function redirectToOffer() {
+            window.location.href = SINGLE_OFFER_LINK;
+        }
+
+        // --- SCROLL EFFECTS ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 50) {
+                if(html.classList.contains('dark')){
+                    nav.classList.add('bg-dark/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/10');
+                } else {
+                    nav.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-md', 'border-b', 'border-slate-200');
+                }
+            } else {
+                nav.className = 'fixed top-0 left-0 right-0 h-[70px] md:h-[80px] flex items-center justify-between px-4 md:px-12 z-50 transition-all duration-500';
+            }
+        });
+
+        // Re-trigger scroll event on theme change to update header styles
+        themeToggleBtn.addEventListener('click', () => {
+            window.dispatchEvent(new Event('scroll'));
+        });
+
+        // --- DRAG TO SCROLL FUNCTIONALITY ---
+        function enableDragScroll(selector) {
+            const slider = document.querySelector(selector);
+            if (!slider) return;
+            
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            let hasMoved = false;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.classList.add('active');
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+                hasMoved = false;
+            });
+            slider.addEventListener('mouseleave', () => { isDown = false; });
+            slider.addEventListener('mouseup', () => { isDown = false; });
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; 
+                if(Math.abs(walk) > 5) hasMoved = true;
+                slider.scrollLeft = scrollLeft - walk;
+            });
+            
+            slider.addEventListener('click', (e) => { 
+                if(hasMoved) {
+                    e.preventDefault();
+                    e.stopPropagation(); 
+                }
+            }, true);
+        }
+
+        function createSlug(text) {
+            if (!text) return 'watch';
+            return text.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+
+        // --- INITIALIZATION ---
+        async function init() {
+            const params = new URLSearchParams(window.location.search);
+            const pathParts = window.location.pathname.split('/').filter(Boolean); 
+            
+            let type = params.get('type');
+            let id = params.get('id');
+            let urlSeason = params.get('s');
+            let urlEpisode = params.get('e');
+
+            if(pathParts.length >= 2 && (pathParts[0] === 'tv' || pathParts[0] === 'movie')) {
+                type = pathParts[0];
+                id = pathParts[1];
+                if(type === 'tv') {
+                    urlSeason = pathParts[2];
+                    urlEpisode = pathParts[3];
+                }
+            }
+
+            // FALLBACK FOR PREVIEW: Load "Stranger Things" if no ID
+            if(!id) {
+                type = 'tv';
+                id = '66732'; // Stranger Things
+            }
+
+            try {
+                const res = await fetch(`${API.BASE}/${type}/${id}?api_key=${API.KEY}`);
+                const data = await res.json();
+                
+                if(data.success === false) return;
+
+                mainPosterUrl = `${API.FULL}${data.backdrop_path}`;
+                document.title = `${data.title || data.name} — FLIX Premium`;
+                
+                const bgContainer = document.getElementById('backdrop-container');
+                bgContainer.style.backgroundImage = `url(${mainPosterUrl})`;
+                
+                document.getElementById('v-title').innerText = data.title || data.name;
+                document.getElementById('v-rating').innerHTML = `<i class="fas fa-star text-yellow-300 mr-1"></i> ${data.vote_average.toFixed(1)}`;
+                document.getElementById('v-year').innerText = (data.release_date || data.first_air_date || '----').split('-')[0];
+                document.getElementById('v-runtime').innerText = `${data.runtime || (data.episode_run_time && data.episode_run_time.length > 0 ? data.episode_run_time[0] : 45)} min`;
+                
+                mainOverview = data.overview || "Premium exclusive overview not available.";
+                document.getElementById('v-overview').innerText = mainOverview;
+
+                renderFooterStudios(data.production_companies);
+
+                if(type === 'tv' && data.seasons) {
+                    document.getElementById('tv-layout').classList.remove('hidden');
+                    document.getElementById('status-viewer').classList.remove('hidden');
+                    document.getElementById('status-viewer').classList.add('flex');
+                    
+                    renderSeasons(data.seasons, id, urlSeason, urlEpisode, data.name);
+                    enableDragScroll('#season-scroll'); 
+                    enableDragScroll('#episode-scroll');
+                }
+            } catch(e) {
+                console.error("Error:", e);
+                document.getElementById('v-title').innerText = "Content Unavailable";
+            }
+        }
+
+        // --- RENDER STUDIOS ---
+        function renderFooterStudios(companies) {
+            const container = document.getElementById('footer-studios');
+            if(!companies || companies.length === 0) return;
+            const toRender = companies.slice(0, 5);
+            container.innerHTML = toRender.map(c => c.logo_path 
+                ? `<img src="${API.IMG}${c.logo_path}" alt="${c.name}" class="h-6 md:h-8 filter grayscale dark:brightness-200 contrast-125 mix-blend-multiply dark:mix-blend-normal">`
+                : `<span class="text-slate-500 dark:text-gray-500 text-sm font-bold">${c.name}</span>`
+            ).join('');
+        }
+
+        // --- RENDER SEASONS ---
+        function renderSeasons(seasons, tvId, urlSeason, urlEpisode, tvShowName) {
+            const container = document.getElementById('season-scroll');
+            const valid = seasons.filter(s => s.season_number > 0).sort((a, b) => b.season_number - a.season_number);
+            
+            if(valid.length === 0) return;
+            const activeSNum = urlSeason ? parseInt(urlSeason) : valid[0].season_number;
+            currentSNum = activeSNum;
+
+            container.innerHTML = valid.map((s) => `
+                <div class="snap-start flex-none w-[120px] md:w-[150px] group clickable" onclick="selectSeason(this, ${tvId}, ${s.season_number}, '${createSlug(tvShowName)}')">
+                    <div class="img-card rounded-2xl overflow-hidden aspect-[2/3] bg-slate-200 dark:bg-surface relative shadow-md dark:shadow-lg ${s.season_number === activeSNum ? 'active ring-2 ring-brand ring-offset-2 ring-offset-light dark:ring-offset-dark' : ''}">
+                        <img src="${s.poster_path ? API.IMG + s.poster_path : 'https://placehold.co/200x300/e2e8f0/475569?text=S' + s.season_number}" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" draggable="false" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-80 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="absolute bottom-3 left-0 right-0 text-center font-black text-white text-lg md:text-xl drop-shadow-md z-10 hidden md:block opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0">
+                            S${s.season_number}
+                        </div>
+                    </div>
+                    <div class="text-center mt-3 text-sm font-bold text-slate-500 dark:text-gray-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors ${s.season_number === activeSNum ? 'text-slate-900 dark:text-white' : ''}">
+                        Season ${s.season_number}
+                    </div>
+                </div>
+            `).join('');
+
+            loadEpisodes(tvId, activeSNum, urlEpisode);
+        }
+
+        // --- LOAD EPISODES ---
+        async function loadEpisodes(tvId, sNum, urlEpisode) {
+            const scroll = document.getElementById('episode-scroll');
+            scroll.innerHTML = '<div class="text-slate-500 dark:text-gray-400 py-12 w-full flex items-center justify-center font-bold gap-3"><i class="fas fa-circle-notch fa-spin text-brand"></i> Loading episodes...</div>';
+            
+            try {
+                const res = await fetch(`${API.BASE}/tv/${tvId}/season/${sNum}?api_key=${API.KEY}`);
+                const data = await res.json();
+                
+                if(!data.episodes || data.episodes.length === 0) {
+                    scroll.innerHTML = '<div class="text-slate-500 py-8 text-center w-full bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10">No episodes found.</div>';
+                    return;
+                }
+
+                const activeENum = urlEpisode ? parseInt(urlEpisode) : data.episodes[0].episode_number;
+
+                scroll.innerHTML = data.episodes.map((ep) => {
+                    const finalThumb = ep.still_path ? (API.IMG + ep.still_path) : mainPosterUrl;
+                    const runtimeDisplay = ep.runtime ? `${ep.runtime}m` : '45m';
+
+                    return `
+                        <div class="snap-start ep-card flex-none w-[280px] md:w-[340px] bg-white dark:bg-white/5 rounded-2xl overflow-hidden cursor-pointer group shadow-md dark:shadow-none border border-slate-200 dark:border-white/10 ${ep.episode_number === activeENum ? 'active' : 'hover:bg-slate-50 dark:hover:bg-white/10'}" 
+                             onclick="selectEpisode(this, '${ep.still_path || ''}', '${(ep.overview || '').replace(/'/g, "\\'")}', ${ep.episode_number})">
+                            <div class="relative w-full aspect-video bg-slate-200 dark:bg-surface overflow-hidden">
+                                <img src="${finalThumb}" onerror="this.src='${mainPosterUrl}'" class="w-full h-full object-cover opacity-90 dark:opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" draggable="false" loading="lazy">
+                                
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <div class="w-12 h-12 rounded-full bg-brand/90 text-white flex items-center justify-center pl-1 shadow-[0_0_20px_rgba(229,9,20,0.6)] transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+
+                                <div class="absolute top-3 left-3 bg-brand text-white text-[10px] md:text-xs font-black px-2.5 py-1.5 rounded-md shadow-lg">EP ${ep.episode_number}</div>
+                                
+                                <div class="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md text-white text-[10px] md:text-xs font-bold px-2.5 py-1.5 rounded-md shadow-md flex items-center gap-1.5">
+                                    <i class="far fa-clock text-[9px]"></i> ${runtimeDisplay}
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white truncate mb-2 group-hover:text-brand transition-colors">${ep.name || `Episode ${ep.episode_number}`}</h3>
+                                <p class="text-xs md:text-sm text-slate-500 dark:text-gray-400 line-clamp-2 leading-relaxed font-medium">${ep.overview || 'Stream this premium episode now in 4K Ultra HD.'}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                const activeEpData = data.episodes.find(e => e.episode_number === activeENum) || data.episodes[0];
+                updateEpisodeDetail(activeENum, activeEpData.still_path, activeEpData.overview);
+                
+            } catch(e) { 
+                scroll.innerHTML = '<div class="text-brand py-8 text-center w-full bg-red-100 dark:bg-red-900/10 rounded-xl border border-red-500/20 font-bold">Failed to load episodes.</div>'; 
+            }
+        }
+
+        // --- INTERACTION LOGIC ---
+        function selectSeason(el, tvId, sNum, slug) {
+            document.querySelectorAll('#season-scroll .img-card').forEach(p => {
+                p.classList.remove('active', 'ring-2', 'ring-brand', 'ring-offset-2', 'ring-offset-light', 'dark:ring-offset-dark');
+                p.nextElementSibling.classList.remove('text-slate-900', 'dark:text-white');
+                p.nextElementSibling.classList.add('text-slate-500', 'dark:text-gray-400');
+            });
+            el.querySelector('.img-card').classList.add('active', 'ring-2', 'ring-brand', 'ring-offset-2', 'ring-offset-light', 'dark:ring-offset-dark');
+            el.querySelector('.text-center').classList.remove('text-slate-500', 'dark:text-gray-400');
+            el.querySelector('.text-center').classList.add('text-slate-900', 'dark:text-white');
+            
+            currentSNum = sNum;
+            loadEpisodes(tvId, sNum);
+        }
+
+        function selectEpisode(el, stillPath, overview, epNum) {
+            document.querySelectorAll('.ep-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            
+            updateEpisodeDetail(epNum, stillPath, overview);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateEpisodeDetail(epNum, stillPath, overview) {
+            const bgContainer = document.getElementById('backdrop-container');
+            
+            if(stillPath && stillPath !== 'null' && stillPath !== '') {
+                bgContainer.style.backgroundImage = `url(${API.FULL}${stillPath})`;
+            } else {
+                bgContainer.style.backgroundImage = `url(${mainPosterUrl})`;
+            }
+            
+            document.getElementById('v-overview').innerText = (overview && overview.trim() !== "") ? overview : mainOverview;
+            document.getElementById('current-ep-label').innerText = `SEASON ${currentSNum} — EPISODE ${epNum}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script src="https://twigcrucialpal.com/cc/4e/da/cc4eda891de7f30a7015d2741774fa17.js"></script>
+   <!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,4987856,4,0,0,0,00010000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4987856&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+ </script>
+</body>
+</html>

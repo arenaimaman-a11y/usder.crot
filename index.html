@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Primary SEO Metadata -->
+    <title>USFLIX — Unlimited Premium Cinema | Stream Ultra 4K Dolby Atmos</title>
+    <meta name="description" content="Step into a world-class cinematic experience with USFLIX. Enjoy thousands of blockbusters and TV shows in Ultra HD with immersive spatial audio.">
+    <meta name="keywords" content="USFLIX, movie streaming, watch free movies, login usflix, cinematic stream">
+    
+    <!-- Favicon Representation -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23E50914' /><stop offset='100%25' stop-color='%23FF385C' /></linearGradient></defs><rect width='100' height='100' rx='25' fill='%23050505'/><text x='50%25' y='55%25' dominant-baseline='central' text-anchor='middle' font-family='System-UI, sans-serif' font-weight='900' font-size='70' fill='url(%23grad)'>U</text></svg>">
+
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        netflixRed: '#E50914',
+                        darkBg: '#040406',
+                        surface: '#0d0d11',
+                        glassBorder: 'rgba(255, 255, 255, 0.06)',
+                        vipGold: '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --accent: #E50914;
+            --accent-glow: rgba(229, 9, 20, 0.45);
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        body {
+            background-color: #040406;
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Seamless smooth horizontal scrolling layout */
+        .scroll-container {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        /* Micro Interactive Animations */
+        .smooth-transition {
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* High-fidelity glassmorphism with premium highlighting */
+        .glass-panel {
+            background: rgba(13, 13, 17, 0.75);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-subtle {
+            background: rgba(8, 8, 12, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* Dramatic Cinematic Gradient Overlay */
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, #040406 3%, rgba(4, 4, 6, 0.7) 40%, transparent 80%),
+                        linear-gradient(to right, rgba(4, 4, 6, 0.95) 0%, rgba(4, 4, 6, 0.3) 60%, transparent 100%);
+            z-index: 1;
+        }
+
+        /* Visual Scale Effects on Poster Cards */
+        .movie-card {
+            position: relative;
+            flex: 0 0 145px;
+            aspect-ratio: 2/3;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+            transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (min-width: 640px) { .movie-card { flex: 0 0 175px; } }
+        @media (min-width: 1024px) { .movie-card { flex: 0 0 210px; } }
+
+        .movie-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: rgba(229, 9, 20, 0.5);
+            box-shadow: 0 20px 35px rgba(229, 9, 20, 0.25);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .movie-card:hover img {
+            transform: scale(1.07);
+        }
+
+        /* Interactive pulse effect for login-button highlight */
+        .glow-button {
+            box-shadow: 0 0 22px var(--accent-glow);
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 32px var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Fluid layout skeleton shimmers */
+        .skeleton {
+            background: linear-gradient(90deg, #0e0e12 25%, #1b1b24 50%, #0e0e12 75%);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.6s infinite;
+        }
+
+        @keyframes loading-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Navigation active underline visual state */
+        .nav-desktop-link {
+            position: relative;
+        }
+        .nav-desktop-link::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 16px;
+            height: 2px;
+            border-radius: 2px;
+            background-color: #E50914;
+            transition: transform 0.3s ease;
+        }
+        .nav-desktop-link.active::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-netflixRed selection:text-white">
+
+    <!-- High-end Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 smooth-transition h-[74px] flex items-center justify-between px-6 lg:px-16" id="navbar">
+        <div class="flex items-center gap-12">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-1.5 cursor-pointer select-none group" onclick="showView('home')">
+                <span class="font-outfit font-black text-3xl text-netflixRed tracking-tighter drop-shadow-[0_0_15px_rgba(229,9,20,0.5)] group-hover:scale-105 smooth-transition">U</span>
+                <span class="font-outfit font-extrabold text-xl text-white tracking-widest group-hover:tracking-extra-wide smooth-transition">SFLIX</span>
+            </div>
+            
+            <!-- Desktop Navigation Links -->
+            <div class="hidden md:flex items-center gap-8 text-[13px] font-bold tracking-wider uppercase text-gray-400">
+                <button onclick="showView('home')" class="hover:text-white smooth-transition nav-desktop-link active text-white" id="nav-desk-home">Home</button>
+                <button onclick="showView('watchlist')" class="hover:text-white smooth-transition nav-desktop-link" id="nav-desk-watchlist">My Watchlist</button>
+                <button onclick="showView('profile')" class="hover:text-white smooth-transition nav-desktop-link" id="nav-desk-profile">Account</button>
+            </div>
+        </div>
+        
+        <!-- Utility Controls & Login Indicator -->
+        <div class="flex items-center gap-5">
+            <button aria-label="Search" onclick="toggleSearch(true)" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/5 smooth-transition border border-transparent hover:border-white/10">
+                <i class="fa-solid fa-magnifying-glass text-lg"></i>
+            </button>
+            
+            <button aria-label="Notifications" onclick="showNotificationToast()" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/5 smooth-transition relative border border-transparent hover:border-white/10">
+                <i class="fa-regular fa-bell text-lg"></i>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-netflixRed rounded-full ring-2 ring-darkBg animate-pulse"></span>
+            </button>
+            
+            <!-- Profile Capsule -->
+            <button onclick="handleProfileNavClick()" class="relative group flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full border border-white/10 bg-white/5 hover:border-netflixRed/40 hover:bg-netflixRed/5 smooth-transition" id="profile-pill">
+                <div id="profile-avatar-container" class="relative w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center shadow-md border border-white/10 smooth-transition">
+                    <i id="avatar-icon" class="fas fa-user-alt text-zinc-500 text-sm"></i>
+                </div>
+                <!-- Status Dot Indicator (Red: Offline, Green: Online) -->
+                <span id="status-dot" class="absolute -bottom-0.5 right-1 w-2.5 h-2.5 bg-zinc-500 rounded-full ring-2 ring-darkBg smooth-transition"></span>
+                <span id="profile-pill-label" class="hidden lg:inline text-xs font-bold text-gray-400 group-hover:text-white smooth-transition">Guest</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Interactive Search Overlay -->
+    <div id="search-view" class="fixed inset-0 bg-darkBg/98 z-50 hidden flex-col px-6 lg:px-16 pt-[85px] pb-24 overflow-y-auto">
+        <div class="max-w-4xl mx-auto w-full">
+            <div class="flex items-center gap-4 glass-panel p-4 rounded-2xl mb-8">
+                <button onclick="toggleSearch(false)" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 text-gray-400 hover:text-white smooth-transition">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <input type="text" id="search-box-input" class="bg-transparent border-none text-white text-xl font-medium w-full focus:outline-none placeholder-gray-500" placeholder="Search titles, genres, series, or movies...">
+                <button id="clear-search-btn" class="hidden text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest" id="search-status-text">Recommended Searches</h3>
+                <span class="text-xs text-gray-500" id="search-count"></span>
+            </div>
+
+            <div id="search-results" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+        </div>
+    </div>
+
+    <!-- Main SPA View Containers -->
+    <main id="main-content" class="min-h-screen pb-28">
+        
+        <!-- ================= VIEW 1: HOME ================= -->
+        <section id="view-home" class="view-section">
+            <!-- Dramatic Hero Showcase Billboard -->
+            <section id="hero" class="hero-gradient relative h-[85vh] w-full bg-cover bg-top flex items-end px-6 lg:px-16 pb-24 lg:pb-32 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent z-[2]"></div>
+                
+                <div class="relative z-10 max-w-3xl w-full">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-netflixRed text-white px-3.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase flex items-center gap-1.5 shadow-lg shadow-netflixRed/30">
+                            <i class="fas fa-fire animate-pulse"></i> Trending Now
+                        </span>
+                        <span class="bg-white/10 backdrop-blur-md text-white border border-white/15 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5">
+                            <i class="fas fa-medal text-netflixRed"></i> Ultra 4K UHD
+                        </span>
+                    </div>
+                    
+                    <h1 id="hero-title" class="font-outfit font-black text-4xl sm:text-6xl lg:text-7xl leading-none tracking-tight text-white mb-4 drop-shadow-md">USFLIX</h1>
+                    <p id="hero-desc" class="text-sm sm:text-base text-gray-300 mb-8 line-clamp-3 max-w-xl font-medium leading-relaxed">Enjoy world-class cinema with extraordinary spatial Dolby Atmos audio. Sign up today to unlock our entire premium library for free.</p>
+                    
+                    <div class="flex items-center gap-4 flex-wrap">
+                        <button class="glow-button btn-play bg-white hover:bg-gray-100 text-black px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 smooth-transition shadow-xl" id="hero-play-btn">
+                            <i class="fas fa-play text-lg"></i> Play Trailer
+                        </button>
+                        <button class="bg-white/10 hover:bg-white/15 backdrop-blur-md text-white border border-white/10 px-6 py-3.5 rounded-2xl font-bold flex items-center gap-2 smooth-transition" id="hero-watchlist-btn">
+                            <i class="fas fa-plus"></i> Add to Watchlist
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Carousel Sections -->
+            <div class="px-6 lg:px-16 space-y-12 -mt-16 lg:-mt-24 relative z-20">
+                
+                <!-- Section 1: Hot Trending Movies -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-6 bg-netflixRed rounded-full"></div>
+                            <h2 class="text-lg lg:text-2xl font-extrabold tracking-tight">Trending Movies</h2>
+                        </div>
+                        <div class="flex gap-2">
+                            <button aria-label="Scroll Left" onclick="scrollRow('row-trending', -1)" class="w-9 h-9 rounded-full bg-white/5 hover:bg-netflixRed border border-white/10 hover:border-netflixRed flex items-center justify-center text-white smooth-transition"><i class="fas fa-chevron-left text-xs"></i></button>
+                            <button aria-label="Scroll Right" onclick="scrollRow('row-trending', 1)" class="w-9 h-9 rounded-full bg-white/5 hover:bg-netflixRed border border-white/10 hover:border-netflixRed flex items-center justify-center text-white smooth-transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                    <div id="row-trending" class="scroll-container flex gap-4 overflow-x-auto pb-4 pt-1 snap-x"></div>
+                </div>
+
+                <!-- Section 2: Upcoming Blockbusters -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-6 bg-red-500 rounded-full"></div>
+                            <h2 class="text-lg lg:text-2xl font-extrabold tracking-tight">Upcoming Blockbusters</h2>
+                        </div>
+                        <div class="flex gap-2">
+                            <button aria-label="Scroll Left" onclick="scrollRow('row-new', -1)" class="w-9 h-9 rounded-full bg-white/5 hover:bg-netflixRed border border-white/10 hover:border-netflixRed flex items-center justify-center text-white smooth-transition"><i class="fas fa-chevron-left text-xs"></i></button>
+                            <button aria-label="Scroll Right" onclick="scrollRow('row-new', 1)" class="w-9 h-9 rounded-full bg-white/5 hover:bg-netflixRed border border-white/10 hover:border-netflixRed flex items-center justify-center text-white smooth-transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                    <div id="row-new" class="scroll-container flex gap-4 overflow-x-auto pb-4 pt-1 snap-x"></div>
+                </div>
+
+                <!-- Section 3: Popular Global TV Shows -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+                            <h2 class="text-lg lg:text-2xl font-extrabold tracking-tight">Featured TV Shows</h2>
+                        </div>
+                        <div class="flex gap-2">
+                            <button aria-label="Scroll Left" onclick="scrollRow('row-series', -1)" class="w-9 h-9 rounded-full bg-white/5 hover:bg-netflixRed border border-white/10 hover:border-netflixRed flex items-center justify-center text-white smooth-transition"><i class="fas fa-chevron-left text-xs"></i></button>
+                            <button aria-label="Scroll Right" onclick="scrollRow('row-series', 1)" class="w-9 h-9 rounded-full bg-white/5 hover:bg-netflixRed border border-white/10 hover:border-netflixRed flex items-center justify-center text-white smooth-transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                    <div id="row-series" class="scroll-container flex gap-4 overflow-x-auto pb-4 pt-1 snap-x"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW 2: WATCHLIST ================= -->
+        <section id="view-watchlist" class="view-section hidden pt-28 px-6 lg:px-16">
+            <div class="max-w-6xl mx-auto">
+                
+                <!-- Watchlist signed-out prompt -->
+                <div id="watchlist-unsigned-prompt" class="flex flex-col items-center justify-center py-20 text-center space-y-6">
+                    <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 border border-white/5">
+                        <i class="fas fa-lock text-3xl"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-bold text-gray-300">Access Restricted</h3>
+                        <p class="text-sm text-gray-500 max-w-sm mx-auto">Please Sign In or Create an Account to save and sync your curated watchlist permanently.</p>
+                    </div>
+                    <button onclick="openAuthModal('login')" class="glow-button bg-netflixRed hover:bg-red-700 text-white font-bold px-8 py-3 rounded-xl text-sm smooth-transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Sign In Now
+                    </button>
+                </div>
+
+                <!-- Watchlist content (signed in) -->
+                <div id="watchlist-signed-content" class="hidden space-y-8">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-netflixRed/15 flex items-center justify-center text-netflixRed border border-netflixRed/20">
+                            <i class="fas fa-bookmark text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl lg:text-4xl font-black font-outfit tracking-tight">My Watchlist</h1>
+                            <p class="text-sm text-gray-400">Manage and track the titles you want to watch next</p>
+                        </div>
+                    </div>
+
+                    <div id="watchlist-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"></div>
+
+                    <!-- Watchlist empty state -->
+                    <div id="watchlist-empty" class="hidden flex-col items-center justify-center py-24 text-center space-y-4">
+                        <div class="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-gray-600 mb-2 border border-white/5">
+                            <i class="fas fa-folder-open text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-300">Your Watchlist is Empty</h3>
+                        <p class="text-sm text-gray-500 max-w-sm">Browse the latest movies and TV shows from the home feed and add them to get started!</p>
+                        <button onclick="showView('home')" class="bg-netflixRed hover:bg-red-700 px-6 py-3 rounded-xl font-bold text-sm smooth-transition">
+                            Explore Home
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= VIEW 3: USER ACCOUNT HUB ================= -->
+        <section id="view-profile" class="view-section hidden pt-28 px-6 lg:px-16">
+            <div class="max-w-4xl mx-auto">
+                
+                <!-- Account Signed Out State -->
+                <div id="profile-unsigned-view" class="glass-panel p-8 sm:p-12 rounded-3xl text-center space-y-8">
+                    <div class="max-w-md mx-auto space-y-4">
+                        <div class="w-24 h-24 mx-auto rounded-full bg-zinc-900 border-2 border-dashed border-zinc-700 flex items-center justify-center relative shadow-inner">
+                            <i class="fas fa-user-secret text-zinc-600 text-4xl"></i>
+                            <span class="absolute -bottom-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] border-2 border-darkBg" title="Offline">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </div>
+                        <h1 class="text-2xl sm:text-4xl font-black font-outfit tracking-tight leading-none mt-4">
+                            USFLIX Member Lounge
+                        </h1>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Unlock ultra-crisp 4K UHD playback, personalized recommendations, and an unlimited bookmark list at zero cost. Sign up in seconds to start streaming.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-sm mx-auto pt-4">
+                        <button onclick="openAuthModal('login')" class="glow-button w-full bg-netflixRed hover:bg-red-700 text-white font-bold py-3.5 rounded-2xl smooth-transition text-sm">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Log In
+                        </button>
+                        <button onclick="openAuthModal('signup')" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold py-3.5 rounded-2xl smooth-transition text-sm">
+                            <i class="fas fa-user-plus mr-2"></i> Create Account
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Account Signed In State -->
+                <div id="profile-signed-view" class="hidden space-y-8">
+                    
+                    <!-- Profile Card -->
+                    <div class="glass-panel p-6 sm:p-10 rounded-3xl flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left">
+                        <div class="relative w-24 h-24 rounded-full bg-gradient-to-tr from-netflixRed to-orange-500 flex items-center justify-center border-4 border-netflixRed/30 shadow-2xl">
+                            <i class="fas fa-user-astronaut text-white text-4xl drop-shadow"></i>
+                            <span class="absolute bottom-1 right-1 w-5 h-5 bg-green-500 rounded-full border-4 border-darkBg animate-pulse" title="Online"></span>
+                        </div>
+                        <div class="space-y-4 flex-1">
+                            <div>
+                                <h2 class="text-2xl sm:text-3xl font-black font-outfit text-white tracking-tight" id="account-display-name">Premium Member</h2>
+                                <p class="text-sm text-zinc-400 mt-1" id="account-display-email">member@usflix.com</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+                                <span class="bg-green-500/10 border border-green-500/20 text-green-500 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full flex items-center gap-1.5">
+                                    <i class="fas fa-check-circle"></i> Verified Account
+                                </span>
+                                <span class="bg-white/10 border border-white/10 text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full flex items-center gap-1.5">
+                                    <i class="fas fa-laptop-house"></i> 4K Ultra Stream Active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Dashboard -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="glass-panel p-5 rounded-2xl text-center space-y-1">
+                            <i class="fas fa-clapperboard text-netflixRed text-lg"></i>
+                            <h4 class="text-xs text-gray-400 font-bold uppercase tracking-wider">Saved Titles</h4>
+                            <p class="text-2xl font-black font-outfit text-white" id="stat-saved-count">0</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl text-center space-y-1">
+                            <i class="fas fa-clock text-blue-500 text-lg"></i>
+                            <h4 class="text-xs text-gray-400 font-bold uppercase tracking-wider">Hours Streamed</h4>
+                            <p class="text-2xl font-black font-outfit text-white">42h 15m</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl text-center space-y-1">
+                            <i class="fas fa-signal text-green-500 text-lg"></i>
+                            <h4 class="text-xs text-gray-400 font-bold uppercase tracking-wider">Stream Quality</h4>
+                            <p class="text-sm font-black text-green-400 uppercase pt-1">Dolby Atmos</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl text-center space-y-1">
+                            <i class="fas fa-circle-play text-amber-500 text-lg"></i>
+                            <h4 class="text-xs text-gray-400 font-bold uppercase tracking-wider">Server Status</h4>
+                            <p class="text-sm font-black text-amber-400 uppercase pt-1">Optimal</p>
+                        </div>
+                    </div>
+
+                    <!-- Settings and Actions -->
+                    <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+                        <h3 class="text-lg font-bold flex items-center gap-2 border-b border-white/5 pb-4">
+                            <i class="fas fa-sliders text-zinc-400"></i> Account Preferences
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Resolution Quality Toggle -->
+                            <div class="flex justify-between items-center py-2">
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Auto Resolution Adjustment</h4>
+                                    <p class="text-xs text-gray-400">Adapts playback dynamically based on your internet speeds</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-netflixRed"></div>
+                                </label>
+                            </div>
+
+                            <hr class="border-white/5">
+
+                            <!-- Notification Toggle -->
+                            <div class="flex justify-between items-center py-2">
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">New Release Alerts</h4>
+                                    <p class="text-xs text-gray-400">Receive notifications when highly anticipated titles drop</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-netflixRed"></div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button onclick="handleSignOut()" class="w-full sm:w-auto bg-white/5 hover:bg-red-950 hover:text-red-400 border border-white/10 hover:border-red-500/30 text-white font-bold px-8 py-3.5 rounded-2xl smooth-transition text-sm">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[440px] h-[72px] rounded-[28px] flex justify-around items-center z-40 shadow-[0_24px_50px_rgba(0,0,0,0.85)] border border-white/10 px-2 bg-[rgba(10,10,13,0.85)] backdrop-blur-2xl">
+        
+        <button onclick="showView('home')" class="nav-btn-link flex flex-col items-center gap-1.5 text-netflixRed flex-1 py-2 smooth-transition active" id="btn-nav-home">
+            <div class="relative flex items-center justify-center p-2 rounded-2xl transition-all duration-300">
+                <i class="fas fa-house text-lg"></i>
+            </div>
+            <span class="text-[9px] font-black tracking-widest uppercase">Home</span>
+        </button>
+        
+        <button onclick="toggleSearch(true)" class="nav-btn-link flex flex-col items-center gap-1.5 text-gray-400 hover:text-white flex-1 py-2 smooth-transition">
+            <div class="relative flex items-center justify-center p-2 rounded-2xl transition-all duration-300">
+                <i class="fas fa-magnifying-glass text-lg"></i>
+            </div>
+            <span class="text-[9px] font-black tracking-widest uppercase">Search</span>
+        </button>
+        
+        <button onclick="showView('watchlist')" class="nav-btn-link flex flex-col items-center gap-1.5 text-gray-400 hover:text-white flex-1 py-2 smooth-transition" id="btn-nav-watchlist">
+            <div class="relative flex items-center justify-center p-2 rounded-2xl transition-all duration-300">
+                <i class="fas fa-bookmark text-lg"></i>
+            </div>
+            <span class="text-[9px] font-black tracking-widest uppercase">Saved</span>
+        </button>
+        
+        <button onclick="showView('profile')" class="nav-btn-link flex flex-col items-center gap-1.5 text-gray-400 hover:text-white flex-1 py-2 smooth-transition" id="btn-nav-profile">
+            <div class="relative flex items-center justify-center p-2 rounded-2xl transition-all duration-300">
+                <i id="mobile-profile-nav-icon" class="fas fa-user-alt text-lg"></i>
+            </div>
+            <span class="text-[9px] font-black tracking-widest uppercase">Profile</span>
+        </button>
+    </nav>
+
+    <!-- Authentication Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/95 backdrop-blur-md items-center justify-center p-4">
+        <div class="relative w-full max-w-md bg-surface border border-white/10 rounded-3xl overflow-hidden shadow-2xl animate-[fadeIn_0.3s_ease] p-8 space-y-6">
+            
+            <!-- Dismiss action -->
+            <button aria-label="Close" onclick="closeAuthModal()" class="absolute top-5 right-5 z-50 w-8 h-8 rounded-full bg-black/60 hover:bg-netflixRed text-white flex items-center justify-center smooth-transition border border-white/10">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Brand Header -->
+            <div class="text-center space-y-2">
+                <div class="inline-flex items-center gap-1 font-outfit font-black text-3xl text-netflixRed tracking-tighter drop-shadow-[0_0_15px_rgba(229,9,20,0.5)]">
+                    <span>U</span><span class="text-white text-xl tracking-widest">SFLIX</span>
+                </div>
+                <h2 id="auth-modal-title" class="text-xl font-bold font-outfit text-white">Log In to Your Account</h2>
+                <p id="auth-modal-subtitle" class="text-xs text-gray-400">Use any testing credentials to sign in instantly.</p>
+            </div>
+
+            <!-- Auth Form -->
+            <form id="auth-form" class="space-y-4" onsubmit="handleAuthSubmit(event)">
+                <!-- Input Name (Sign Up only) -->
+                <div id="auth-field-name" class="hidden space-y-1">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Full Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-500">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input type="text" id="auth-input-name" class="w-full pl-10 pr-4 py-3 bg-zinc-900 border border-white/10 rounded-xl focus:outline-none focus:border-netflixRed text-sm text-white placeholder-gray-500 smooth-transition" placeholder="e.g. Maverick Jones">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-500">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <input type="email" id="auth-input-email" required class="w-full pl-10 pr-4 py-3 bg-zinc-900 border border-white/10 rounded-xl focus:outline-none focus:border-netflixRed text-sm text-white placeholder-gray-500 smooth-transition" placeholder="name@domain.com">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-500">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        <input type="password" id="auth-input-password" required class="w-full pl-10 pr-4 py-3 bg-zinc-900 border border-white/10 rounded-xl focus:outline-none focus:border-netflixRed text-sm text-white placeholder-gray-500 smooth-transition" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <button type="submit" id="auth-submit-btn" class="glow-button w-full bg-netflixRed hover:bg-red-700 text-white font-bold py-3.5 rounded-xl smooth-transition text-sm pt-3 flex items-center justify-center gap-2">
+                    <span>Log In</span> <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Toggle Mode -->
+            <div class="text-center pt-2">
+                <button onclick="toggleAuthMode()" id="auth-toggle-btn" class="text-xs text-netflixRed hover:underline font-semibold">
+                    New to USFLIX? Sign Up for Free
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Detail Modal Overlay -->
+    <div id="movie-detail-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl bg-surface border border-white/10 rounded-3xl overflow-hidden shadow-2xl animate-[fadeIn_0.3s_ease] max-h-[92vh] overflow-y-auto">
+            
+            <!-- Dismiss action -->
+            <button aria-label="Close" onclick="closeDetailModal()" class="absolute top-5 right-5 z-50 w-10 h-10 rounded-full bg-black/70 hover:bg-netflixRed text-white flex items-center justify-center smooth-transition border border-white/10">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Media Banner Backdrop -->
+            <div id="modal-banner" class="relative h-[250px] sm:h-[380px] bg-cover bg-center">
+                <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+                
+                <!-- Play Trigger -->
+                <button id="modal-banner-play-btn" aria-label="Play Trailer" class="absolute inset-0 m-auto w-16 h-16 rounded-full bg-netflixRed/90 text-white flex items-center justify-center text-2xl shadow-2xl hover:scale-110 smooth-transition glow-button">
+                    <i class="fas fa-play ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6 sm:p-10 -mt-16 sm:-mt-24 relative z-10 space-y-8">
+                
+                <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-end">
+                    <img id="modal-poster" class="w-32 sm:w-44 aspect-[2/3] object-cover rounded-2xl shadow-2xl border-2 border-white/10" src="https://placehold.co/342x513/0f0f12/ffffff?text=USFLIX" alt="Poster Image">
+                    <div class="space-y-3 flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span id="modal-badge-type" class="bg-netflixRed text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded">MOVIE</span>
+                            <span id="modal-year" class="bg-white/10 text-xs font-bold px-2.5 py-1 rounded">2026</span>
+                            <span id="modal-rating" class="bg-amber-500/10 text-amber-500 text-xs font-black px-2.5 py-1 rounded flex items-center gap-1">
+                                <i class="fas fa-star"></i> 8.5
+                            </span>
+                        </div>
+                        <h2 id="modal-title" class="text-2xl sm:text-4xl font-black tracking-tight font-outfit">Movie Title</h2>
+                        <p id="modal-genres" class="text-xs sm:text-sm text-gray-400 font-semibold"></p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 pt-4">
+                    <div class="md:col-span-2 space-y-4">
+                        <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fas fa-align-left text-gray-400"></i> Story Overview</h3>
+                        <p id="modal-overview" class="text-sm sm:text-base text-gray-300 leading-relaxed font-medium"></p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fas fa-magic text-gray-400"></i> Media Controls</h3>
+                        <div class="space-y-3">
+                            <button id="modal-action-play" class="w-full bg-white hover:bg-gray-100 text-black py-3.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 smooth-transition shadow-lg shadow-white/5">
+                                <i class="fas fa-play"></i> Watch Trailer (UHD)
+                            </button>
+                            <button id="modal-action-watchlist" class="w-full bg-white/10 hover:bg-white/15 border border-white/10 text-white py-3.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 smooth-transition">
+                                <i class="fas fa-plus"></i> Add to Watchlist
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Cinematic Trailer Player Sandbox -->
+    <div id="video-player-overlay" class="fixed inset-0 bg-black/98 z-50 hidden flex-col justify-between p-6">
+        <div class="flex justify-between items-center z-10">
+            <h3 id="player-title" class="font-outfit font-black text-lg text-white">Streaming Trailer</h3>
+            <button onclick="closeTrailerPlayer()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-netflixRed text-white flex items-center justify-center smooth-transition border border-white/10"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Live Playback Canvas simulator -->
+        <div class="flex-1 max-w-4xl mx-auto w-full flex items-center justify-center relative my-4">
+            <div class="w-full aspect-video rounded-3xl overflow-hidden shadow-2xl bg-zinc-950 border border-white/10 flex items-center justify-center">
+                <div id="player-screen" class="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-center text-center p-8">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/70"></div>
+                    <div class="z-10 space-y-4">
+                        <div class="w-20 h-20 rounded-full bg-netflixRed flex items-center justify-center text-white text-3xl mx-auto shadow-2xl animate-ping opacity-75">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <p class="text-lg font-bold text-white tracking-wide">Connecting to USFLIX Premium Servers...</p>
+                        <p class="text-xs text-gray-400">Stream spatial DTS-X soundtracks instantly with a free member account.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-gray-500 py-2">
+            IMAX Enhanced Technology • DTS-X Cinematic Soundstage Mode Activated.
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-notif" class="fixed bottom-28 right-6 glass-panel border-netflixRed/30 text-white py-4 px-6 rounded-2xl shadow-2xl z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3">
+        <i class="fas fa-circle-info text-netflixRed" id="toast-icon"></i>
+        <span id="toast-message" class="text-xs sm:text-sm font-semibold">Success!</span>
+    </div>
+
+    <!-- Global Application Engine -->
+    <script>
+        const TMDB = {
+            KEY: '22be462e6d3de1dbab03d1ca50847b5a',
+            BASE: 'https://api.themoviedb.org/3',
+            POSTER: 'https://image.tmdb.org/t/p/w342',
+            BACKDROP: 'https://image.tmdb.org/t/p/w1280'
+        };
+
+        // Application Global States
+        let currentFeatured = null;
+        let selectedMovie = null;
+        let activeView = 'home';
+        
+        // Auth states
+        let isLoggedIn = false;
+        let currentUser = null;
+        let authMode = 'login'; // 'login' or 'signup'
+
+        // Local storage load for watchlist
+        let watchlist = JSON.parse(localStorage.getItem('usflix_watchlist_user')) || [];
+
+        // Application bootstrap on load
+        window.onload = function () {
+            initApp();
+            checkAutoLogin();
+        };
+
+        async function initApp() {
+            try {
+                // Adaptive Sticky Desktop Header transition logic
+                window.addEventListener('scroll', () => {
+                    const nav = document.getElementById('navbar');
+                    if (window.scrollY > 40) {
+                        nav.classList.add('bg-[rgba(4,4,6,0.92)]', 'backdrop-blur-2xl', 'border-b', 'border-white/5', 'h-[64px]');
+                        nav.classList.remove('h-[74px]');
+                    } else {
+                        nav.classList.remove('bg-[rgba(4,4,6,0.92)]', 'backdrop-blur-2xl', 'border-b', 'border-white/5', 'h-[64px]');
+                        nav.classList.add('h-[74px]');
+                    }
+                });
+
+                // Display loading skeleton state placeholders
+                showSkeletons();
+
+                // Fetch English-localized trending movies for Billboard Showcase
+                const res = await fetch(`${TMDB.BASE}/trending/all/day?api_key=${TMDB.KEY}&language=en-US`);
+                const data = await res.json();
+                
+                if (data.results && data.results.length > 0) {
+                    currentFeatured = data.results[0];
+                    setupHeroBillboard(currentFeatured);
+                }
+
+                // Concurrent content fetching to guarantee high speeds
+                await Promise.all([
+                    loadRowContent('/trending/all/week', 'row-trending'),
+                    loadRowContent('/movie/upcoming', 'row-new'),
+                    loadRowContent('/tv/top_rated', 'row-series')
+                ]);
+
+                // Update UI elements
+                updateAuthUI();
+                renderWatchlist();
+
+            } catch (err) {
+                console.error("Critical error starting application: ", err);
+                showToast("Failed to connect to USFLIX servers. Please check your network.", "fa-triangle-exclamation");
+            }
+        }
+
+        // Check if user was previously logged in
+        function checkAutoLogin() {
+            const savedUser = localStorage.getItem('usflix_session');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                isLoggedIn = true;
+                updateAuthUI();
+            }
+        }
+
+        // Handle Dynamic Top-Right Pill Click
+        function handleProfileNavClick() {
+            if (isLoggedIn) {
+                showView('profile');
+            } else {
+                openAuthModal('login');
+            }
+        }
+
+        // Open Log In / Sign In modal
+        function openAuthModal(mode = 'login') {
+            authMode = mode;
+            const modal = document.getElementById('auth-modal');
+            const title = document.getElementById('auth-modal-title');
+            const toggleBtn = document.getElementById('auth-toggle-btn');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const nameField = document.getElementById('auth-field-name');
+
+            // Reset Form Inputs
+            document.getElementById('auth-input-email').value = '';
+            document.getElementById('auth-input-password').value = '';
+            document.getElementById('auth-input-name').value = '';
+
+            if (authMode === 'login') {
+                title.innerText = "Log In to Your Account";
+                nameField.classList.add('hidden');
+                submitBtn.innerHTML = `<span>Log In</span> <i class="fas fa-sign-in-alt"></i>`;
+                toggleBtn.innerText = "New to USFLIX? Create an Account for Free";
+            } else {
+                title.innerText = "Create Your Account";
+                nameField.classList.remove('hidden');
+                submitBtn.innerHTML = `<span>Sign Up Now</span> <i class="fas fa-user-plus"></i>`;
+                toggleBtn.innerText = "Already have an account? Log In here";
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleAuthMode() {
+            if (authMode === 'login') {
+                openAuthModal('signup');
+            } else {
+                openAuthModal('login');
+            }
+        }
+
+        // Process Auth Form Submit
+        function handleAuthSubmit(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('auth-input-email').value;
+            const password = document.getElementById('auth-input-password').value;
+            const name = document.getElementById('auth-input-name').value || email.split('@')[0];
+
+            if (authMode === 'login') {
+                // Simulated login success
+                currentUser = {
+                    name: name || "Premium Member",
+                    email: email
+                };
+                showToast(`Welcome back, ${currentUser.name}!`, "fa-circle-check");
+            } else {
+                // Simulated signup success
+                currentUser = {
+                    name: name,
+                    email: email
+                };
+                showToast(`Your account has been registered successfully!`, "fa-crown");
+            }
+
+            isLoggedIn = true;
+            localStorage.setItem('usflix_session', JSON.stringify(currentUser));
+            
+            updateAuthUI();
+            closeAuthModal();
+            renderWatchlist();
+
+            // Refresh view state
+            if (activeView === 'watchlist' || activeView === 'profile') {
+                showView(activeView);
+            }
+        }
+
+        function handleSignOut() {
+            isLoggedIn = false;
+            currentUser = null;
+            localStorage.removeItem('usflix_session');
+            
+            showToast("You have successfully signed out.", "fa-arrow-right-from-bracket");
+            updateAuthUI();
+            
+            if (activeView === 'watchlist' || activeView === 'profile') {
+                showView('home');
+            }
+        }
+
+        // Update UI based on Authentication State
+        function updateAuthUI() {
+            const profilePillLabel = document.getElementById('profile-pill-label');
+            const avatarContainer = document.getElementById('profile-avatar-container');
+            const avatarIcon = document.getElementById('avatar-icon');
+            const statusDot = document.getElementById('status-dot');
+            const mobileProfileIcon = document.getElementById('mobile-profile-nav-icon');
+
+            // View Profile Elements
+            const unsignedView = document.getElementById('profile-unsigned-view');
+            const signedView = document.getElementById('profile-signed-view');
+            const accountName = document.getElementById('account-display-name');
+            const accountEmail = document.getElementById('account-display-email');
+            
+            // Watchlist View Elements
+            const watchlistUnsigned = document.getElementById('watchlist-unsigned-prompt');
+            const watchlistSigned = document.getElementById('watchlist-signed-content');
+
+            if (isLoggedIn && currentUser) {
+                // Header Pill Signed In State (Glow Green)
+                profilePillLabel.innerText = currentUser.name;
+                profilePillLabel.classList.remove('text-gray-400');
+                profilePillLabel.classList.add('text-white');
+
+                // Upgrade icon to astronaut avatar
+                avatarContainer.className = "relative w-8 h-8 rounded-full overflow-hidden bg-gradient-to-tr from-netflixRed to-orange-500 flex items-center justify-center shadow-md border border-white/20 smooth-transition";
+                avatarIcon.className = "fas fa-user-astronaut text-white text-xs drop-shadow";
+                statusDot.className = "absolute -bottom-0.5 right-1 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-darkBg smooth-transition";
+
+                // Watchlist View Protection
+                if (watchlistUnsigned) watchlistUnsigned.classList.add('hidden');
+                if (watchlistSigned) watchlistSigned.classList.remove('hidden');
+
+                // Profile Area Activation
+                if (unsignedView) unsignedView.classList.add('hidden');
+                if (signedView) signedView.classList.remove('hidden');
+                if (accountName) accountName.innerText = currentUser.name;
+                if (accountEmail) accountEmail.innerText = currentUser.email;
+
+                // Mobile Nav Profile State Integration
+                if (mobileProfileIcon) {
+                    mobileProfileIcon.className = "fas fa-user-astronaut text-lg";
+                }
+
+                // Update counts
+                document.getElementById('stat-saved-count').innerText = watchlist.length;
+
+            } else {
+                // Header Pill Unsigned In State (Grey Silhouette)
+                profilePillLabel.innerText = "Sign In";
+                profilePillLabel.classList.remove('text-white');
+                profilePillLabel.classList.add('text-gray-400');
+
+                avatarContainer.className = "relative w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center shadow-md border border-white/10 smooth-transition";
+                avatarIcon.className = "fas fa-user-alt text-zinc-500 text-xs";
+                statusDot.className = "absolute -bottom-0.5 right-1 w-2.5 h-2.5 bg-zinc-500 rounded-full ring-2 ring-darkBg smooth-transition";
+
+                // Watchlist View Protection
+                if (watchlistUnsigned) watchlistUnsigned.classList.remove('hidden');
+                if (watchlistSigned) watchlistSigned.classList.add('hidden');
+
+                // Profile Area Activation
+                if (unsignedView) unsignedView.classList.remove('hidden');
+                if (signedView) signedView.classList.add('hidden');
+
+                // Mobile Nav Profile State Integration
+                if (mobileProfileIcon) {
+                    mobileProfileIcon.className = "fas fa-user-alt text-lg";
+                }
+            }
+        }
+
+        // Setup primary landing hero panel with metadata details
+        function setupHeroBillboard(item) {
+            const backdropUrl = item.backdrop_path ? (TMDB.BACKDROP + item.backdrop_path) : 'https://placehold.co/1280x720/0f0f12/e50914?text=USFLIX+Cinema';
+            const heroEl = document.getElementById('hero');
+            const titleEl = document.getElementById('hero-title');
+            const descEl = document.getElementById('hero-desc');
+            
+            heroEl.style.backgroundImage = `url('${backdropUrl}')`;
+            
+            const title = item.title || item.name;
+            titleEl.innerText = title;
+            descEl.innerText = item.overview || "Enjoy an extraordinary high-fidelity cinematic masterpiece calibrated for optimal screening.";
+            
+            const type = item.title ? 'movie' : 'tv';
+            
+            document.getElementById('hero-play-btn').onclick = () => {
+                window.location.href = `detail.html?id=${item.id}&type=${type}`;
+            };
+            
+            const watchBtn = document.getElementById('hero-watchlist-btn');
+            updateWatchlistBtnUI(watchBtn, item.id);
+            watchBtn.onclick = () => {
+                if (!isLoggedIn) {
+                    openAuthModal('login');
+                    return;
+                }
+                toggleWatchlist(item);
+                updateWatchlistBtnUI(watchBtn, item.id);
+            };
+        }
+
+        function showSkeletons() {
+            const rows = ['row-trending', 'row-new', 'row-series'];
+            rows.forEach(rowId => {
+                const el = document.getElementById(rowId);
+                el.innerHTML = '';
+                for (let i = 0; i < 7; i++) {
+                    el.innerHTML += `
+                        <div class="movie-card skeleton flex-shrink-0">
+                            <div class="absolute inset-0 bg-white/5 animate-pulse"></div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // Fetch curated lists dynamically
+        async function loadRowContent(endpoint, containerId) {
+            try {
+                const res = await fetch(`${TMDB.BASE}${endpoint}?api_key=${TMDB.KEY}&language=en-US`);
+                const data = await res.json();
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
+                        container.innerHTML += createMovieCard(item);
+                    });
+                } else {
+                    container.innerHTML = '<p class="text-xs text-gray-500 py-4 pl-4">No content available at this moment.</p>';
+                }
+            } catch (err) {
+                console.error(`Error populating grid: ${containerId}`, err);
+                document.getElementById(containerId).innerHTML = '<p class="text-xs text-red-500 py-4 pl-4">Failed to load content.</p>';
+            }
+        }
+
+        // Create elegant movie cards
+        function createMovieCard(item) {
+            const imgPath = item.poster_path ? (TMDB.POSTER + item.poster_path) : 'https://placehold.co/342x513/0f0f12/ffffff?text=No+Poster+Found';
+            const rating = item.vote_average ? item.vote_average.toFixed(1) : '0.0';
+            const title = item.title || item.name;
+            const type = item.title ? 'movie' : 'tv';
+            const releaseYear = (item.release_date || item.first_air_date || '2026').substring(0, 4);
+
+            return `
+                <div class="movie-card flex-shrink-0 snap-start" onclick="window.location.href='detail.html?id=${item.id}&type=${type}'">
+                    <img src="${imgPath}" alt="${title}" loading="lazy">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent flex flex-col justify-end p-4 opacity-0 hover:opacity-100 smooth-transition">
+                        <span class="text-[10px] text-amber-500 font-extrabold flex items-center gap-1 mb-1">
+                            <i class="fas fa-star text-[9px]"></i> ${rating}
+                        </span>
+                        <h4 class="text-xs font-black text-white leading-tight line-clamp-2">${title}</h4>
+                        <span class="text-[9px] text-gray-400 mt-1 font-bold uppercase">${releaseYear} • ${type === 'movie' ? 'Movie' : 'TV Show'}</span>
+                    </div>
+
+                    <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md border border-white/10 text-white font-extrabold text-[8px] px-2 py-0.5 rounded-md tracking-wider uppercase">
+                        ${type === 'movie' ? 'MOVIE' : 'TV SHOW'}
+                    </div>
+                </div>
+            `;
+        }
+
+        async function openDetailModal(id, type) {
+            try {
+                const res = await fetch(`${TMDB.BASE}/${type}/${id}?api_key=${TMDB.KEY}&language=en-US`);
+                const item = await res.json();
+                
+                selectedMovie = { ...item, media_type: type };
+
+                const backdropUrl = item.backdrop_path ? (TMDB.BACKDROP + item.backdrop_path) : (item.poster_path ? TMDB.BACKDROP + item.poster_path : 'https://placehold.co/1280x720/0f0f12/e50914?text=USFLIX');
+                document.getElementById('modal-banner').style.backgroundImage = `url('${backdropUrl}')`;
+                
+                document.getElementById('modal-poster').src = item.poster_path ? (TMDB.POSTER + item.poster_path) : 'https://placehold.co/342x513/0f0f12/ffffff?text=No+Poster';
+                document.getElementById('modal-title').innerText = item.title || item.name;
+                document.getElementById('modal-overview').innerText = item.overview || "This cinematic masterwork is currently available to stream for free on USFLIX.";
+                
+                const genresStr = item.genres ? item.genres.map(g => g.name).join(', ') : 'Action, Adventure';
+                document.getElementById('modal-genres').innerText = genresStr;
+
+                document.getElementById('modal-badge-type').innerText = type === 'movie' ? 'MOVIE' : 'TV SHOW';
+                document.getElementById('modal-year').innerText = (item.release_date || item.first_air_date || '2026').substring(0, 4);
+                document.getElementById('modal-rating').innerHTML = `<i class="fas fa-star"></i> ${item.vote_average ? item.vote_average.toFixed(1) : '8.5'}`;
+
+                const modalWatchlistBtn = document.getElementById('modal-action-watchlist');
+                updateWatchlistBtnUI(modalWatchlistBtn, item.id, true);
+                
+                modalWatchlistBtn.onclick = () => {
+                    if (!isLoggedIn) {
+                        closeDetailModal();
+                        openAuthModal('login');
+                        return;
+                    }
+                    toggleWatchlist(selectedMovie);
+                    updateWatchlistBtnUI(modalWatchlistBtn, item.id, true);
+                    renderWatchlist();
+                };
+
+                document.getElementById('modal-action-play').onclick = () => {
+                    playTrailer(item.title || item.name);
+                };
+                document.getElementById('modal-banner-play-btn').onclick = () => {
+                    playTrailer(item.title || item.name);
+                };
+
+                const modal = document.getElementById('movie-detail-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+
+            } catch (err) {
+                console.error("Failed to load details: ", err);
+                showToast("Failed to fetch cinematic details.", "fa-triangle-exclamation");
+            }
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById('movie-detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        function scrollRow(containerId, direction) {
+            const container = document.getElementById(containerId);
+            const scrollAmount = container.clientWidth * 0.8;
+            container.scrollBy({
+                left: scrollAmount * direction,
+                behavior: 'smooth'
+            });
+        }
+
+        function playTrailer(title) {
+            document.getElementById('player-title').innerText = `Now Streaming: ${title}`;
+            const playerOverlay = document.getElementById('video-player-overlay');
+            playerOverlay.classList.remove('hidden');
+            playerOverlay.classList.add('flex');
+        }
+
+        function closeTrailerPlayer() {
+            const playerOverlay = document.getElementById('video-player-overlay');
+            playerOverlay.classList.add('hidden');
+            playerOverlay.classList.remove('flex');
+        }
+
+        function toggleSearch(show) {
+            const searchView = document.getElementById('search-view');
+            const searchInput = document.getElementById('search-box-input');
+            
+            if (show) {
+                searchView.classList.remove('hidden');
+                searchView.classList.add('flex');
+                searchInput.focus();
+                document.body.style.overflow = 'hidden';
+            } else {
+                searchView.classList.add('hidden');
+                searchView.classList.remove('flex');
+                searchInput.value = '';
+                document.getElementById('search-results').innerHTML = '';
+                document.getElementById('clear-search-btn').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Input search query with optimized micro debouncing
+        let searchTimeout = null;
+        document.getElementById('search-box-input').addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            const clearBtn = document.getElementById('clear-search-btn');
+            
+            if (query.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch(query);
+            }, 300);
+        });
+
+        document.getElementById('clear-search-btn').addEventListener('click', () => {
+            const input = document.getElementById('search-box-input');
+            input.value = '';
+            input.focus();
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            performSearch('');
+        });
+
+        async function performSearch(query) {
+            const resultsContainer = document.getElementById('search-results');
+            const statusText = document.getElementById('search-status-text');
+            const countText = document.getElementById('search-count');
+            
+            if (!query || query.length < 3) {
+                statusText.innerText = "Recommended Searches";
+                countText.innerText = "";
+                resultsContainer.innerHTML = '';
+                
+                try {
+                    const res = await fetch(`${TMDB.BASE}/trending/all/day?api_key=${TMDB.KEY}&language=en-US`);
+                    const data = await res.json();
+                    data.results.slice(0, 10).forEach(item => {
+                        resultsContainer.innerHTML += createMovieCard(item);
+                    });
+                } catch(e) {}
+                return;
+            }
+
+            statusText.innerText = "Searching cinema archive...";
+            
+            try {
+                const res = await fetch(`${TMDB.BASE}/search/multi?api_key=${TMDB.KEY}&query=${encodeURIComponent(query)}&language=en-US`);
+                const data = await res.json();
+                
+                resultsContainer.innerHTML = '';
+                const filtered = data.results.filter(item => item.poster_path && (item.media_type === 'movie' || item.media_type === 'tv'));
+                
+                if (filtered.length > 0) {
+                    statusText.innerText = `Search results for "${query}"`;
+                    countText.innerText = `${filtered.length} titles found`;
+                    filtered.forEach(item => {
+                        resultsContainer.innerHTML += createMovieCard(item);
+                    });
+                } else {
+                    statusText.innerText = `No results found for "${query}"`;
+                    countText.innerText = "0 matches";
+                }
+
+            } catch (err) {
+                console.error("Search failed: ", err);
+                statusText.innerText = "Search is temporarily unavailable.";
+            }
+        }
+
+        // SPA Router Logic
+        function showView(viewName) {
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            document.querySelectorAll('.nav-desktop-link').forEach(link => {
+                link.classList.remove('text-white', 'active');
+                link.classList.add('text-gray-400');
+            });
+            document.querySelectorAll('.nav-btn-link').forEach(link => {
+                link.classList.remove('text-netflixRed', 'active');
+                link.classList.add('text-gray-400');
+            });
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            activeView = viewName;
+
+            const deskLink = document.getElementById(`nav-desk-${viewName}`);
+            if (deskLink) {
+                deskLink.classList.remove('text-gray-400');
+                deskLink.classList.add('text-white', 'active');
+            }
+
+            const mobileLink = document.getElementById(`btn-nav-${viewName}`);
+            if (mobileLink) {
+                mobileLink.classList.remove('text-gray-400');
+                mobileLink.classList.add('text-netflixRed', 'active');
+            }
+
+            if (viewName === 'watchlist') {
+                renderWatchlist();
+            }
+
+            toggleSearch(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleWatchlist(item) {
+            const index = watchlist.findIndex(x => x.id === item.id);
+            const title = item.title || item.name;
+
+            if (index > -1) {
+                watchlist.splice(index, 1);
+                showToast(`"${title}" removed from Watchlist`, "fa-circle-xmark");
+            } else {
+                const saveItem = {
+                    id: item.id,
+                    title: item.title,
+                    name: item.name,
+                    poster_path: item.poster_path,
+                    vote_average: item.vote_average,
+                    release_date: item.release_date,
+                    first_air_date: item.first_air_date,
+                    media_type: item.title ? 'movie' : 'tv'
+                };
+                watchlist.push(saveItem);
+                showToast(`"${title}" added to Watchlist!`, "fa-bookmark");
+            }
+
+            localStorage.setItem('usflix_watchlist_user', JSON.stringify(watchlist));
+            
+            // Sync stats dynamically
+            const statSaved = document.getElementById('stat-saved-count');
+            if (statSaved) statSaved.innerText = watchlist.length;
+        }
+
+        function isInWatchlist(id) {
+            return watchlist.some(x => x.id === id);
+        }
+
+        function updateWatchlistBtnUI(btnEl, id, isModal = false) {
+            if (!btnEl) return;
+            const saved = isInWatchlist(id);
+            
+            if (isModal) {
+                if (saved) {
+                    btnEl.innerHTML = `<i class="fas fa-check text-green-500"></i> Added to Watchlist`;
+                    btnEl.classList.add('bg-green-500/10', 'border-green-500/30');
+                    btnEl.classList.remove('bg-white/10');
+                } else {
+                    btnEl.innerHTML = `<i class="fas fa-plus"></i> Add to Watchlist`;
+                    btnEl.classList.remove('bg-green-500/10', 'border-green-500/30');
+                    btnEl.classList.add('bg-white/10');
+                }
+            } else {
+                if (saved) {
+                    btnEl.innerHTML = `<i class="fas fa-check text-green-500"></i> In Watchlist`;
+                } else {
+                    btnEl.innerHTML = `<i class="fas fa-plus"></i> Watchlist`;
+                }
+            }
+        }
+
+        function renderWatchlist() {
+            const grid = document.getElementById('watchlist-grid');
+            const emptyState = document.getElementById('watchlist-empty');
+            
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            if (isLoggedIn && watchlist.length > 0) {
+                if (emptyState) emptyState.classList.add('hidden');
+                grid.classList.remove('hidden');
+                grid.classList.add('grid');
+                
+                watchlist.forEach(item => {
+                    grid.innerHTML += createMovieCard(item);
+                });
+            } else {
+                grid.classList.add('hidden');
+                grid.classList.remove('grid');
+                if (emptyState) emptyState.classList.remove('hidden');
+            }
+        }
+
+        function showToast(message, iconClass = "fa-circle-info") {
+            const toast = document.getElementById('toast-notif');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.innerText = message;
+            toastIcon.className = `fas ${iconClass}`;
+            
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            if (window.toastTimeout) clearTimeout(window.toastTimeout);
+
+            window.toastTimeout = setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 3500);
+        }
+
+        function showNotificationToast() {
+            showToast("Movie Alert: New trailers are uploaded for upcoming blockbusters!", "fa-bell");
+        }
+    </script>
+     <!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,4960036,4,0,0,0,00010000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4960036&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+</body>
+</html>
